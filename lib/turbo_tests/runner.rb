@@ -101,7 +101,7 @@ module TurboTests
 
       @threads.each(&:join)
 
-      @reporter.failed_examples.empty? && wait_threads.map(&:value).all?(&:success?)
+      @reporter.failed_examples.empty? && wait_threads.compact.map(&:value).all?(&:success?)
     end
 
     private
@@ -131,6 +131,7 @@ module TurboTests
           type: "exit",
           process_id: process_id,
         }
+        return nil
       else
         env["RSPEC_FORMATTER_OUTPUT_ID"] = SecureRandom.uuid
         env["RUBYOPT"] = ["-I#{File.expand_path("..", __dir__)}", ENV["RUBYOPT"]].compact.join(" ")
